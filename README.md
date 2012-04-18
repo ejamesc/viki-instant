@@ -20,6 +20,15 @@ which may be found in qs_score.js.
 
 After that it's a simple matter of filling the movie div with ViKi embed code.
 
+Problems
+--------
+There are a whole bunch of edge cases and funny problems that I didn't have time to work out (I'm supposed to be studying for my exams next week ;-) Problems I've noticed:
+
+* Search is slow for query strings >= 14 chars
+* The additional videos section doesn't clear when switching videos
+* If you clear the searchbox after a search, the additional videos show _all_ the videos. This is terrible.
+* Javascript overall may be optimized. Not as fast as I like.
+
 Time spent: 1.5 days. See a demo at http://elijames.org/viki/
 
 Dependencies:
