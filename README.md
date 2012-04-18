@@ -20,8 +20,10 @@ which may be found in qs_score.js.
 
 After that it's a simple matter of filling the movie div with ViKi embed code.
 
-Time spent: 1.5 days.
+Time spent: 1.5 days. See a demo at http://elijames.org/viki/
+
 Dependencies:
-    jQuery
+    ```jQuery
     pycurl (for the Python scripts)
     simplejson (for the Python scripts)
+    ```
