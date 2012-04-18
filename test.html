@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+    <head>
+        <title>ViKi Instant</title>
+        <link href='http://fonts.googleapis.com/css?family=Quattrocento' rel='stylesheet' type='text/css'>
+        <link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script src="/viki/qs_score.js"></script>
+
+        <style>
+            body {font: 14px Inconsolata, Courier, mono; color: #eee; background: #000;}
+            #outer {
+                width: 600px;
+                margin: 50px auto;
+            }
+            h1 {font: 65px Quattrocento, Times, serif; line-height: 40px; margin-left: 20%;}
+            h2 {font-family: Quattrocento, Times, serif; border-bottom: 1px solid #bbb; padding-bottom: 3px;}
+            #wrapper {
+                font: 15px Helvetica, Arial, sans-serif;
+                line-height: 23px;
+            }
+            #searchBox {
+                width: 600px;
+                height: 30px;
+                font-size: 15px;
+            }
+
+            #movie { 
+                width: 600px;
+                margin-top: 20px;
+                height: 450px;
+                background-color: #999;    
+            }
+
+            #results {
+                min-height: 200px;
+                margin-bottom: 20px;
+                width: 600px;
+                display: none;
+                border-bottom: 1px solid #ccc;
+                border-left: 1px solid #ccc;
+                border-right: 1px solid #ccc;
+                box-shadow: 5px 5px 5px #eee;
+            }
+
+            #sidebar {
+                width: 600px;
+                margin-top: 20px;
+            }
+
+            .text {
+                padding: 5px;
+                width: 600px;
+                font: 15px 'Inconsolata', Courier, monospace;
+                line-height: 22px;
+            }
+            li {
+                list-style: none;
+            }
+
+            a { color: #eee;}
+
+
+        </style>
+    </head>
+    <body>
+        <div id="outer">
+            <h1>ViKi Instant</h1>
+            <strong>Search</strong>
+            <input id="searchBox" name="search" value="" spellcheck="false" placeholder="e.g. black jack ep 1" />
+            <div id="movie"></div>
+            <div id="text"></div>
+            <strong>Alternative videos:</strong>
+            <div id="sidebar">None at the moment </div>
+
+        </div> <!--outerwrapper-->
+    </body>
+    <script>
+        function getLoad(obj) {
+            $('#movie').html("<iframe width='600' height='450' src='http://www.viki.com/swfs/vikiplayer.swf?media_id=" + obj['id'] + "&host=www.viki.com&auto_play=true&source=api'></iframe>");
+            $('#text').html("<br/><h2>Currently Playing: " + obj['title'] + "</h2>");
+        }
+
+         function swtch(id) {
+             $('#movie').html("<iframe width='600' height='450' src='http://www.viki.com/swfs/vikiplayer.swf?media_id=" + id + "&host=www.viki.com&auto_play=true&source=api'></iframe>");       
+         }
+
+         function swptitle(title) {
+          $('#text').html("<br/><h2>Currently Playing: " + title + "</h2>");
+         }
+
+
+        // Load all the show ids into a variable
+        var json = (function () {
+            var json = null;
+            $.ajax({
+                'async': false,
+                'global': false,
+                'url': '/viki/showids_final.json',
+                'dataType': "json",
+                'success': function (data) {
+                    json = data;
+                }
+            });
+            return json;
+        })(); 
+
+
+        // Livesearch code
+        $(function(){
+            var t = null;
+            $("input#searchBox").keyup(function(){
+                $('#movie').html("");
+
+                // we mustn't let the search query  be too long
+                if ($('input#searchBox').val() > 16) {
+                    filter();
+                }
+                if (t) {
+                    clearTimeout(t);
+                }
+                t = setTimeout("filter()", 500);
+            });
+        });
+
+        //Start searching
+        function filter() {
+            $('#movie').html("");
+            qr = $('input#searchBox').val().toLowerCase();
+            len = qr.length;
+            if (len > 16) { qr = qr.substring(len-17); }
+            scores = [];
+
+            $.each(json, function() {
+                var score = this['title'].toLowerCase().score(qr);
+                if (score > 0) {
+                    scores.push([score, this]);
+                }
+            });
+
+            sorted = scores.sort(function(a, b){ return b[0] - a[0];});
+            getLoad(sorted[0][1]);
+            loadSidebar(sorted);
+        }
+
+        function loadSidebar(sorted) {
+            $('#sidebar').html("");
+            if (sorted.length) {
+            $.each(sorted, function(i){
+                var entry = "<li><a href='javascript:swtch(" + this[1]['id'] + ");swptitle(&apos;" + this[1]['title'] + "&apos; );'>"  + this[1]['title'] +"</a><li>";
+                $("#sidebar").append(entry);
+            });
+            } else {$('#sidebar').html("");
+        }
+
+    }
+
+</script>
+</html>
+
+
