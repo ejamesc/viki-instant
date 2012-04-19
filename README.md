@@ -1,7 +1,7 @@
 ViKi Instant
 ============
 
-An hacky little Javascript project. Uses jQuery to parse, search and run ViKi videos.
+A hacky little Javascript project. Uses jQuery to parse, search and run ViKi videos.
 
 Notes
 -----
