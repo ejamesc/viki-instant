@@ -28,6 +28,8 @@ There are a whole bunch of edge cases and funny problems that I didn't have time
 * The additional videos section doesn't clear when switching videos by clicking
   a video link
 * Javascript overall may be optimized. Not as fast as I like.
+* Problem with loading videos fromt he additional videos section, if the title
+  has utf-8 (non-English) characters.
 
 Time spent: 1.5 days. See a demo at http://elijames.org/viki/
 
