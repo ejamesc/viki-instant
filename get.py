@@ -1,4 +1,3 @@
-import pycurl
 import os
 import simplejson as json
 """ Grabs all channel ids and serializes to file.

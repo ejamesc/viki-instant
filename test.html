@@ -89,7 +89,6 @@
           $('#text').html("<br/><h2>Currently Playing: " + title + "</h2>");
          }
 
-
         // Load all the show ids into a variable
         var json = (function () {
             var json = null;
@@ -128,6 +127,10 @@
             $('#movie').html("");
             qr = $('input#searchBox').val().toLowerCase();
             len = qr.length;
+            if (len == 0) {
+                $('#sidebar').html("None at the moment");
+                return False;
+            }
             if (len > 16) { qr = qr.substring(len-17); }
             scores = [];
 
